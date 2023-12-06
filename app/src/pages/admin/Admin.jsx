@@ -27,7 +27,12 @@ export default function Admin() {
   return (
     <Layout>
       <div className='flex flex-col gap-y-6'>
-        <h1 className='font-poppins text-2xl font-normal'>Flights</h1>
+        <div className='flex justify-between items-center'>
+          <h1 className='font-poppins text-2xl font-normal'>Flights</h1>
+          <Link to='/'>
+            <button className='bg-zinc-400'>Home</button>
+          </Link>
+        </div>
         <div className='grid grid-cols-3 gap-12'>
           {flights.map((flight) => (
             <Flight

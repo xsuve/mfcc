@@ -1,40 +1,45 @@
 export const airports = [
   {
     code: 'OTP',
-    city: 'Bucharest'
+    city: 'Bucharest',
   },
   {
     code: 'CLJ',
-    city: 'Cluj-Napoca'
+    city: 'Cluj-Napoca',
   },
   {
-    code: 'TSR',
-    city: 'Timisoara'
+    code: 'FRA',
+    city: 'Frankfurt',
   },
   {
-    code: 'GHV',
-    city: 'Brasov'
+    code: 'BER',
+    city: 'Berlin',
   },
   {
-    code: 'TGM',
-    city: 'Targu Mures'
+    code: 'PAR',
+    city: 'Paris',
   },
   {
-    code: 'SBZ',
-    city: 'Sibiu'
+    code: 'IST',
+    city: 'Istanbul',
   },
   {
-    code: 'IAS',
-    city: 'Iasi'
+    code: 'LON',
+    city: 'London',
   },
   {
-    code: 'CND',
-    city: 'Constanta'
+    code: 'MAD',
+    city: 'Madrid',
   },
   {
-    code: 'CRA',
-    city: 'Craiova'
-  }
+    code: 'ATH',
+    city: 'Athens',
+  },
 ];
 
-export const companies = ['WizzAir', 'RyanAir', 'Lufthansa', 'Turkish Airlines'];
+export const companies = [
+  'WizzAir',
+  'RyanAir',
+  'Lufthansa',
+  'Turkish Airlines',
+];

@@ -4,7 +4,8 @@ const config = {
     user: 'root',
     password: '',
     database: 'mfcc',
-    connectTimeout: 60000,
+    waitForConnections: true,
+    enableKeepAlive: true,
   },
 };
 

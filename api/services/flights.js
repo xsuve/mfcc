@@ -1,7 +1,7 @@
 const db = require('../db');
 
 async function getAllFlights() {
-  const rows = await db.query(`SELECT * FROM flight`);
+  const [rows] = await db.query(`SELECT * FROM flight`);
 
   if (!rows) {
     return [];
@@ -11,7 +11,7 @@ async function getAllFlights() {
 }
 
 async function getFlight(id) {
-  const rows = await db.query(`SELECT * FROM flight WHERE id = '${id}'`);
+  const [rows] = await db.query(`SELECT * FROM flight WHERE id = '${id}'`);
 
   if (!rows[0]) {
     return null;
@@ -26,18 +26,18 @@ async function createFlight(flight) {
   const result = await db.query(
     `
       INSERT INTO flight
-      (id, fromAirport, fromTime, fromStops, toAirport, toTime, toStops, boarding, departure, arrival, company, seats, price)
+      (id, fromAirport, fromTime, toAirport, toTime, boarding, departure, arrival, company, seats, price)
       VALUES
       (
-        '${id}', '${flight.fromAirport}', '${flight.fromTime}', ${flight.fromStops},
-        '${flight.toAirport}', '${flight.toTime}', ${flight.toStops},
+        '${id}', '${flight.fromAirport}', '${flight.fromTime}',
+        '${flight.toAirport}', '${flight.toTime}',
         '${flight.boarding}', '${flight.departure}', '${flight.arrival}',
         '${flight.company}', ${flight.seats}, ${flight.price}
       )
     `
   );
 
-  if (!result.affectedRows) {
+  if (result.affectedRows === 0) {
     return false;
   }
 
@@ -49,15 +49,15 @@ async function editFlight(id, flight) {
     `
       UPDATE flight
       SET
-        fromAirport = '${flight.fromAirport}', fromTime = '${flight.fromTime}', fromStops = ${flight.fromStops},
-        toAirport = '${flight.toAirport}', toTime = '${flight.toTime}', toStops = ${flight.toStops},
+        fromAirport = '${flight.fromAirport}', fromTime = '${flight.fromTime}',
+        toAirport = '${flight.toAirport}', toTime = '${flight.toTime}',
         boarding = '${flight.boarding}', departure='${flight.departure}', arrival = '${flight.arrival}',
         company = '${flight.company}', seats = ${flight.seats}, price = ${flight.price}
       WHERE id = '${id}'
     `
   );
 
-  if (!result.affectedRows) {
+  if (result.affectedRows === 0) {
     return null;
   }
 
@@ -65,13 +65,22 @@ async function editFlight(id, flight) {
 }
 
 async function deleteFlight(id) {
-  const result = await db.query(`DELETE FROM flight WHERE id = '${id}'`);
+  try {
+    (await db.getConnection()).beginTransaction();
 
-  if (!result.affectedRows) {
+    await db.query(`DELETE FROM ticket WHERE flightId = '${id}'`);
+
+    await db.query(`DELETE FROM flight WHERE id = '${id}'`);
+
+    (await db.getConnection()).commit();
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    (await db.getConnection()).rollback();
+
     return false;
   }
-
-  return true;
 }
 
 function _generateFlightId() {

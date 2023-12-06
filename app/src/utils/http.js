@@ -3,27 +3,43 @@ import axios from 'axios';
 const api = 'http://localhost:3001';
 
 async function GET(url) {
-  return await axios.get(api + url);
+  try {
+    return await axios.get(api + url);
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 async function POST(url, payload) {
-  return await axios.post(api + url, payload, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    return await axios.post(api + url, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 async function PUT(url, payload) {
-  return await axios.put(api + url, payload, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    return await axios.put(api + url, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 async function DELETE(url) {
-  return await axios.delete(api + url);
+  try {
+    return await axios.delete(api + url);
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 export { GET, POST, PUT, DELETE };

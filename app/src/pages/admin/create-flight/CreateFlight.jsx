@@ -11,10 +11,8 @@ export default function CreateFlight() {
   const [formData, setFormData] = useState({
     fromAirport: '',
     fromTime: '',
-    fromStops: '',
     toAirport: '',
     toTime: '',
-    toStops: '',
     boarding: '',
     departure: '',
     arrival: '',
@@ -51,27 +49,27 @@ export default function CreateFlight() {
           Create a new flight
         </h1>
         <form className='w-1/2 flex flex-col gap-y-12' noValidate>
-          <div className='flex flex-col gap-y-3'>
-            <h6 className='font-poppins text-lg font-normal'>From</h6>
-            <div className='flex flex-col gap-y-1'>
-              <label>Airport</label>
-              <select
-                defaultValue=''
-                name='fromAirport'
-                onChange={(e) =>
-                  setFormData({ ...formData, fromAirport: e.target.value })
-                }>
-                <option value='' disabled>
-                  Select flight from
-                </option>
-                {airports.map((airport) => (
-                  <option key={airport.code} value={airport.code}>
-                    {airport.code} - {airport.city}
+          <div className='flex justify-between gap-x-6'>
+            <div className='flex flex-col gap-y-3 w-full'>
+              <h6 className='font-poppins text-lg font-normal'>From</h6>
+              <div className='flex flex-col gap-y-1'>
+                <label>Airport</label>
+                <select
+                  defaultValue=''
+                  name='fromAirport'
+                  onChange={(e) =>
+                    setFormData({ ...formData, fromAirport: e.target.value })
+                  }>
+                  <option value='' disabled>
+                    Select flight from
                   </option>
-                ))}
-              </select>
-            </div>
-            <div className='flex justify-between gap-x-6'>
+                  {airports.map((airport) => (
+                    <option key={airport.code} value={airport.code}>
+                      {airport.code} - {airport.city}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <div className='flex flex-col gap-y-1 w-full'>
                 <label>Time</label>
                 <input
@@ -83,47 +81,27 @@ export default function CreateFlight() {
                   }
                 />
               </div>
-              <div className='flex flex-col gap-y-1 w-full'>
-                <label>Stops</label>
+            </div>
+            <div className='flex flex-col gap-y-3 w-full'>
+              <h6 className='font-poppins text-lg font-normal'>To</h6>
+              <div className='flex flex-col gap-y-1'>
+                <label>Airport</label>
                 <select
                   defaultValue=''
-                  name='fromStops'
+                  name='toAirport'
                   onChange={(e) =>
-                    setFormData({ ...formData, fromStops: e.target.value })
+                    setFormData({ ...formData, toAirport: e.target.value })
                   }>
                   <option value='' disabled>
-                    Select flight from stops
+                    Select flight to
                   </option>
-                  <option value='0'>0 stops</option>
-                  <option value='1'>1 stop</option>
-                  <option value='2'>2 stops</option>
-                  <option value='3'>3 stops</option>
-                  <option value='4'>4 stops</option>
+                  {airports.map((airport) => (
+                    <option key={airport.code} value={airport.code}>
+                      {airport.code} - {airport.city}
+                    </option>
+                  ))}
                 </select>
               </div>
-            </div>
-          </div>
-          <div className='flex flex-col gap-y-3'>
-            <h6 className='font-poppins text-lg font-normal'>To</h6>
-            <div className='flex flex-col gap-y-1'>
-              <label>Airport</label>
-              <select
-                defaultValue=''
-                name='toAirport'
-                onChange={(e) =>
-                  setFormData({ ...formData, toAirport: e.target.value })
-                }>
-                <option value='' disabled>
-                  Select flight to
-                </option>
-                {airports.map((airport) => (
-                  <option key={airport.code} value={airport.code}>
-                    {airport.code} - {airport.city}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className='flex justify-between gap-x-6'>
               <div className='flex flex-col gap-y-1 w-full'>
                 <label>Time</label>
                 <input
@@ -134,24 +112,6 @@ export default function CreateFlight() {
                     setFormData({ ...formData, toTime: e.target.value })
                   }
                 />
-              </div>
-              <div className='flex flex-col gap-y-1 w-full'>
-                <label>Stops</label>
-                <select
-                  defaultValue=''
-                  name='toStops'
-                  onChange={(e) =>
-                    setFormData({ ...formData, toStops: e.target.value })
-                  }>
-                  <option value='' disabled>
-                    Select flight to stops
-                  </option>
-                  <option value='0'>0 stops</option>
-                  <option value='1'>1 stop</option>
-                  <option value='2'>2 stops</option>
-                  <option value='3'>3 stops</option>
-                  <option value='4'>4 stops</option>
-                </select>
               </div>
             </div>
           </div>

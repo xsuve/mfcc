@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { deleteFlight } from '../../services/flights';
+import { buyTicket } from '../../services/tickets';
 
 export default function Flight({
   data,
@@ -19,12 +19,33 @@ export default function Flight({
     }
 
     setIsLoading(false);
-    onChange(data.id);
+
+    if (onChange) {
+      onChange(data.id);
+    }
+  };
+
+  const handleBuyTicket = async () => {
+    setIsLoading(true);
+
+    const response = await buyTicket(data.id, 1);
+    if (!response) {
+      alert('Failed to buy ticket for flight.');
+    }
+
+    setIsLoading(false);
+
+    if (onChange) {
+      onChange(data.id);
+    }
   };
 
   return (
     <div>
-      <div className='p-6 bg-blue-500 flex justify-between items-center'>
+      <div
+        className={`p-6 flex justify-between items-center ${
+          data.seats === 0 ? 'bg-zinc-400' : 'bg-blue-500'
+        }`}>
         <div className='text-left'>
           <h5 className='font-poppins font-normal text-xl tracking-wider text-white'>
             {data.fromAirport}
@@ -32,19 +53,16 @@ export default function Flight({
           <h6 className='font-poppins font-normal text-lg text-white'>
             {data.fromTime}
           </h6>
-          <p className='font-poppins font-light text-xs text-white'>{`${
-            data.fromStops
-          } ${
-            data.fromStops > 0
-              ? data.fromStops > 1
-                ? 'stops'
-                : 'stop'
-              : 'stops'
-          }`}</p>
         </div>
-        <div className='flex gap-x-2'>
+        <div className='flex items-center'>
           <div className='text-white tracking-widest'>-----</div>
-          <PaperAirplaneIcon className='w-6 h-6 text-white' />
+          <div className='pl-3 pr-4'>
+            <img
+              src='/img/plane-icon-white.svg'
+              className='w-6 h-6 rotate-[150deg]'
+              alt=''
+            />
+          </div>
           <div className='text-white tracking-widest'>-----</div>
         </div>
         <div className='text-right'>
@@ -54,11 +72,6 @@ export default function Flight({
           <h6 className='font-poppins font-normal text-lg text-white'>
             {data.toTime}
           </h6>
-          <p className='font-poppins font-light text-xs text-white'>{`${
-            data.toStops
-          } ${
-            data.toStops > 0 ? (data.toStops > 1 ? 'stops' : 'stop') : 'stops'
-          }`}</p>
         </div>
       </div>
       <div className='p-6 bg-white'>
@@ -118,7 +131,7 @@ export default function Flight({
         {isAdmin ? (
           <div className='flex justify-between gap-x-4'>
             <Link to={`/admin/edit-flight/${data.id}`}>
-              <button onClick={null}>Edit flight</button>
+              <button>Edit flight</button>
             </Link>
             <button
               className='bg-red-500'
@@ -128,8 +141,15 @@ export default function Flight({
             </button>
           </div>
         ) : (
-          <button className='w-full' onClick={null}>
-            Buy ticket
+          <button
+            className={`w-full ${data.seats === 0 ? 'bg-zinc-400' : ''}`}
+            onClick={handleBuyTicket}
+            disabled={isLoading || data.seats === 0}>
+            {isLoading
+              ? 'Loading...'
+              : data.seats === 0
+              ? 'No more tickets available'
+              : 'Buy ticket'}
           </button>
         )}
       </div>
