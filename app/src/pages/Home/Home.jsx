@@ -1,30 +1,28 @@
 import { useEffect, useState } from 'react';
-
-import { Layout, TicketBox } from '../../components';
-
-import * as ticketsService from '../../services/tickets';
+import { Layout, Flight } from '../../components';
+import { getAllFlights } from '../../services/flights';
 
 export default function Home() {
-  const [tickets, setTickets] = useState([]);
+  const [flights, setFlights] = useState([]);
 
   useEffect(() => {
-    const fetchTickets = async () => {
-      const tickets = await ticketsService.getAll();
-      if (tickets.length === 0) {
+    const fetchFlights = async () => {
+      const flights = await getAllFlights();
+      if (flights.length === 0) {
         return;
       }
 
-      setTickets(tickets);
+      setFlights(flights);
     };
 
-    fetchTickets();
+    fetchFlights();
   }, []);
 
   return (
     <Layout>
       <div className='grid grid-cols-3'>
-        {tickets.map((ticket) => (
-          <TicketBox data={ticket} />
+        {flights.map((flight) => (
+          <Flight data={flight} />
         ))}
       </div>
     </Layout>

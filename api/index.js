@@ -12,13 +12,13 @@ app.use(
 
 const port = 3001;
 
-const ticketsRouter = require('./routes/tickets');
+const flightsRouter = require('./routes/flights');
 
 app.get('/', (_, res) => {
   res.json({ message: 'ok' });
 });
 
-app.use('/tickets', ticketsRouter);
+app.use('/flights', flightsRouter);
 
 app.use((error, req, res, next) => {
   const statusCode = error.statusCode || 500;

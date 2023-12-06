@@ -1,4 +1,4 @@
 import Layout from './layout/Layout';
-import TicketBox from './ticket-box/TicketBox';
+import Flight from './flight/Flight';
 
-export { Layout, TicketBox };
+export { Layout, Flight };

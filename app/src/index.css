@@ -3,3 +3,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+button, button[type='button'], button[type='submit'] {
+  @apply px-6 py-3 bg-blue-500 text-white font-poppins font-normal text-sm;
+}
+label {
+  @apply font-poppins text-sm font-normal;
+}
+input, select {
+  @apply border font-poppins text-sm font-normal outline-none appearance-none;
+}
+input {
+  @apply py-2 px-4;
+}
+select {
+  @apply py-2 px-4;
+}

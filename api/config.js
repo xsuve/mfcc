@@ -2,8 +2,8 @@ const config = {
   db: {
     host: 'localhost',
     user: 'root',
-    password: 'root',
-    database: 'mfcc-project',
+    password: '',
+    database: 'mfcc',
     connectTimeout: 60000,
   },
 };
