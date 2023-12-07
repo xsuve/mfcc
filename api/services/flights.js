@@ -65,21 +65,25 @@ async function editFlight(id, flight) {
 }
 
 async function deleteFlight(id) {
+  const connection = await db.getConnection();
+
   try {
-    (await db.getConnection()).beginTransaction();
+    await connection.beginTransaction();
 
     await db.query(`DELETE FROM ticket WHERE flightId = '${id}'`);
 
     await db.query(`DELETE FROM flight WHERE id = '${id}'`);
 
-    (await db.getConnection()).commit();
+    await connection.commit();
 
     return true;
   } catch (error) {
     console.error(error);
-    (await db.getConnection()).rollback();
+    await connection.rollback();
 
     return false;
+  } finally {
+    await connection.release();
   }
 }
 

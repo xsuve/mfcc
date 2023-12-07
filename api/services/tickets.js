@@ -13,10 +13,12 @@ async function getClientTickets(clientId) {
 }
 
 async function buyTicket(flightId, clientId) {
+  const connection = await db.getConnection();
+
   try {
     const terminalGate = _generateTerminalGate();
 
-    (await db.getConnection()).beginTransaction();
+    await connection.beginTransaction();
 
     await db.query(
       `
@@ -38,20 +40,24 @@ async function buyTicket(flightId, clientId) {
       `
     );
 
-    (await db.getConnection()).commit();
+    await connection.commit();
 
     return true;
   } catch (error) {
     console.error(error);
-    (await db.getConnection()).rollback();
+    await connection.rollback();
 
     return false;
+  } finally {
+    await connection.release();
   }
 }
 
 async function cancelFlight(ticketId, flightId, clientId) {
+  const connection = await db.getConnection();
+
   try {
-    (await db.getConnection()).beginTransaction();
+    await connection.beginTransaction();
 
     await db.query(
       `DELETE FROM ticket WHERE id = ${ticketId} AND clientId = ${clientId}`
@@ -65,14 +71,16 @@ async function cancelFlight(ticketId, flightId, clientId) {
       `
     );
 
-    (await db.getConnection()).commit();
+    await connection.commit();
 
     return true;
   } catch (error) {
     console.error(error);
-    (await db.getConnection()).rollback();
+    await connection.rollback();
 
     return false;
+  } finally {
+    await connection.release();
   }
 }
 
