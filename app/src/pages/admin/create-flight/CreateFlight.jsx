@@ -1,12 +1,28 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Layout } from '../../../components';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { airports, companies } from '../../../utils/selectOptions';
+import { airports } from '../../../utils/selectOptions';
 import { createFlight } from '../../../services/flights';
-import { useState } from 'react';
+import { getAllCompanies } from '../../../services/companies';
+import { useState, useEffect } from 'react';
 
 export default function CreateFlight() {
   const navigate = useNavigate();
+
+  const [companies, setCompanies] = useState([]);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      const companies = await getAllCompanies();
+      if (companies.lentgh === 0) {
+        return;
+      }
+
+      setCompanies(companies);
+    };
+
+    fetchCompanies();
+  }, []);
 
   const [formData, setFormData] = useState({
     fromAirport: '',
@@ -16,7 +32,7 @@ export default function CreateFlight() {
     boarding: '',
     departure: '',
     arrival: '',
-    company: '',
+    companyId: '',
     seats: '',
     price: '',
   });
@@ -59,7 +75,8 @@ export default function CreateFlight() {
                   name='fromAirport'
                   onChange={(e) =>
                     setFormData({ ...formData, fromAirport: e.target.value })
-                  }>
+                  }
+                >
                   <option value='' disabled>
                     Select flight from
                   </option>
@@ -91,7 +108,8 @@ export default function CreateFlight() {
                   name='toAirport'
                   onChange={(e) =>
                     setFormData({ ...formData, toAirport: e.target.value })
-                  }>
+                  }
+                >
                   <option value='' disabled>
                     Select flight to
                   </option>
@@ -155,16 +173,17 @@ export default function CreateFlight() {
               <label>Company</label>
               <select
                 defaultValue=''
-                name='company'
+                name='companyId'
                 onChange={(e) =>
-                  setFormData({ ...formData, company: e.target.value })
-                }>
+                  setFormData({ ...formData, companyId: e.target.value })
+                }
+              >
                 <option value='' disabled>
                   Select flight company
                 </option>
                 {companies.map((company) => (
-                  <option key={company} value={company}>
-                    {company}
+                  <option key={company.id} value={company.id}>
+                    {company.name}
                   </option>
                 ))}
               </select>

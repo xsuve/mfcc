@@ -7,7 +7,14 @@ import {
   RouterProvider,
   Navigate,
 } from 'react-router-dom';
-import { Home, Admin, CreateFlight, EditFlight } from './pages';
+import {
+  Home,
+  Admin,
+  CreateFlight,
+  EditFlight,
+  CreateCompany,
+  EditCompany,
+} from './pages';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +36,14 @@ const router = createBrowserRouter([
   {
     path: '/admin/edit-flight/:id',
     element: <EditFlight />,
+  },
+  {
+    path: '/admin/create-company',
+    element: <CreateCompany />,
+  },
+  {
+    path: '/admin/edit-company/:id',
+    element: <EditCompany />,
   },
 ]);
 

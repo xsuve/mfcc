@@ -1,22 +1,31 @@
 import { useEffect, useState } from 'react';
 import { getFlight } from '../../services/flights';
 import { cancelFlight } from '../../services/tickets';
+import { getCompany } from '../../services/companies';
 
 export default function Ticket({ data, onChange = undefined }) {
   const [isLoading, setIsLoading] = useState(false);
   const [flight, setFlight] = useState();
+  const [companyName, setCompanyName] = useState(null);
 
   useEffect(() => {
-    const fetchFlight = async () => {
+    const fetchData = async () => {
       const flight = await getFlight(data.flightId);
       if (!flight) {
         return;
       }
 
       setFlight(flight);
+
+      const company = await getCompany(flight.companyId);
+      if (!company) {
+        return;
+      }
+
+      setCompanyName(company.name);
     };
 
-    fetchFlight();
+    fetchData();
   }, []);
 
   const handleCancel = async () => {
@@ -85,7 +94,7 @@ export default function Ticket({ data, onChange = undefined }) {
                   Company
                 </p>
                 <h5 className='font-poppins text-base font-normal'>
-                  {flight.company}
+                  {companyName}
                 </h5>
               </div>
               <div className='text-left flex flex-col gap-y-1'>
@@ -109,7 +118,8 @@ export default function Ticket({ data, onChange = undefined }) {
               <button
                 className='bg-red-500'
                 onClick={handleCancel}
-                disabled={isLoading}>
+                disabled={isLoading}
+              >
                 {isLoading ? 'Loading...' : 'Cancel'}
               </button>
             </div>

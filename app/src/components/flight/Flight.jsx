@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { deleteFlight } from '../../services/flights';
 import { buyTicket } from '../../services/tickets';
+import { getCompany } from '../../services/companies';
 
 export default function Flight({
   data,
@@ -9,6 +10,21 @@ export default function Flight({
   onChange = undefined,
 }) {
   const [isLoading, setIsLoading] = useState(false);
+
+  const [companyName, setCompanyName] = useState(null);
+
+  useEffect(() => {
+    const fetchCompanyName = async () => {
+      const company = await getCompany(data.companyId);
+      if (!company) {
+        return;
+      }
+
+      setCompanyName(company.name);
+    };
+
+    fetchCompanyName();
+  }, [data.companyId]);
 
   const handleDelete = async () => {
     setIsLoading(true);
@@ -45,7 +61,8 @@ export default function Flight({
       <div
         className={`p-6 flex justify-between items-center ${
           data.seats === 0 ? 'bg-zinc-400' : 'bg-blue-500'
-        }`}>
+        }`}
+      >
         <div className='text-left'>
           <h5 className='font-poppins font-normal text-xl tracking-wider text-white'>
             {data.fromAirport}
@@ -109,7 +126,7 @@ export default function Flight({
               Company
             </p>
             <h5 className='font-poppins text-base font-normal'>
-              {data.company}
+              {companyName || '-'}
             </h5>
           </div>
           <div className='text-right flex flex-col gap-y-1'>
@@ -136,7 +153,8 @@ export default function Flight({
             <button
               className='bg-red-500'
               onClick={handleDelete}
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               {isLoading ? 'Loading...' : 'Delete flight'}
             </button>
           </div>
@@ -144,7 +162,8 @@ export default function Flight({
           <button
             className={`w-full ${data.seats === 0 ? 'bg-zinc-400' : ''}`}
             onClick={handleBuyTicket}
-            disabled={isLoading || data.seats === 0}>
+            disabled={isLoading || data.seats === 0}
+          >
             {isLoading
               ? 'Loading...'
               : data.seats === 0

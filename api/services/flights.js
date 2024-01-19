@@ -26,13 +26,13 @@ async function createFlight(flight) {
   const result = await db.query(
     `
       INSERT INTO flight
-      (id, fromAirport, fromTime, toAirport, toTime, boarding, departure, arrival, company, seats, price)
+      (id, fromAirport, fromTime, toAirport, toTime, boarding, departure, arrival, companyId, seats, price)
       VALUES
       (
         '${id}', '${flight.fromAirport}', '${flight.fromTime}',
         '${flight.toAirport}', '${flight.toTime}',
         '${flight.boarding}', '${flight.departure}', '${flight.arrival}',
-        '${flight.company}', ${flight.seats}, ${flight.price}
+        '${flight.companyId}', ${flight.seats}, ${flight.price}
       )
     `
   );
@@ -51,8 +51,8 @@ async function editFlight(id, flight) {
       SET
         fromAirport = '${flight.fromAirport}', fromTime = '${flight.fromTime}',
         toAirport = '${flight.toAirport}', toTime = '${flight.toTime}',
-        boarding = '${flight.boarding}', departure='${flight.departure}', arrival = '${flight.arrival}',
-        company = '${flight.company}', seats = ${flight.seats}, price = ${flight.price}
+        boarding = '${flight.boarding}', departure = '${flight.departure}', arrival = '${flight.arrival}',
+        companyId = '${flight.companyId}', seats = ${flight.seats}, price = ${flight.price}
       WHERE id = '${id}'
     `
   );

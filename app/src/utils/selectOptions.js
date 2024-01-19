@@ -36,10 +36,3 @@ export const airports = [
     city: 'Athens',
   },
 ];
-
-export const companies = [
-  'WizzAir',
-  'RyanAir',
-  'Lufthansa',
-  'Turkish Airlines',
-];

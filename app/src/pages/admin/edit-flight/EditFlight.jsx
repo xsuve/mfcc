@@ -2,23 +2,28 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '../../../components';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { airports, companies } from '../../../utils/selectOptions';
+import { airports } from '../../../utils/selectOptions';
 import { getFlight, editFlight } from '../../../services/flights';
+import { getAllCompanies } from '../../../services/companies';
 
 export default function EditFlight() {
   const navigate = useNavigate();
   const { id } = useParams();
+
+  const [companies, setCompanies] = useState([]);
 
   const [formData, setFormData] = useState();
 
   useEffect(() => {
     const fetchFlight = async () => {
       const flight = await getFlight(id);
-      if (!flight) {
+      const companies = await getAllCompanies();
+      if (!flight && companies.lentgh === 0) {
         return;
       }
 
       setFormData(flight);
+      setCompanies(companies);
     };
 
     fetchFlight();
@@ -49,9 +54,7 @@ export default function EditFlight() {
               Back
             </h6>
           </Link>
-          <h1 className='font-poppins text-2xl font-normal'>
-            Create a new flight
-          </h1>
+          <h1 className='font-poppins text-2xl font-normal'>Edit flight</h1>
           <form className='w-1/2 flex flex-col gap-y-12' noValidate>
             <div className='flex justify-between gap-x-6'>
               <div className='flex flex-col gap-y-3 w-full'>
@@ -63,7 +66,8 @@ export default function EditFlight() {
                     name='fromAirport'
                     onChange={(e) =>
                       setFormData({ ...formData, fromAirport: e.target.value })
-                    }>
+                    }
+                  >
                     <option value='' disabled>
                       Select flight from
                     </option>
@@ -96,7 +100,8 @@ export default function EditFlight() {
                     name='toAirport'
                     onChange={(e) =>
                       setFormData({ ...formData, toAirport: e.target.value })
-                    }>
+                    }
+                  >
                     <option value='' disabled>
                       Select flight to
                     </option>
@@ -163,17 +168,18 @@ export default function EditFlight() {
               <div className='flex flex-col gap-y-1 w-full'>
                 <label>Company</label>
                 <select
-                  value={formData.company}
-                  name='company'
+                  value={formData.companyId || ''}
+                  name='companyId'
                   onChange={(e) =>
-                    setFormData({ ...formData, company: e.target.value })
-                  }>
+                    setFormData({ ...formData, companyId: e.target.value })
+                  }
+                >
                   <option value='' disabled>
                     Select flight company
                   </option>
                   {companies.map((company) => (
-                    <option key={company} value={company}>
-                      {company}
+                    <option key={company.id} value={company.id}>
+                      {company.name}
                     </option>
                   ))}
                 </select>
